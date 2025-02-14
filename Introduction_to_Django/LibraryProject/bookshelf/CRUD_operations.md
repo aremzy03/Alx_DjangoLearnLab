@@ -22,9 +22,11 @@ Book.objects.all()
 output: <QuerySet [<Book: Nineteen Eighty-Four by George Orwell (1949)>]>
 
 ## Delete Book
-Book.objects.filter(id=1).delete()
+from bookshelf.model import book
+book = Book.objects.get(title= "1984")
+book.delete()
 
-output: (0, {})
+output: (1, {'bookshelf.Book': 1})
 
 Book.objects.all()
 

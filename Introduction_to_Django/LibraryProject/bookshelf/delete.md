@@ -1,2 +1,3 @@
-Book.objects.filter(id=1).delete()
-Book.objects.all()
+from bookshelf.model import book
+book = Book.objects.get(title= "1984")
+book.delete()
