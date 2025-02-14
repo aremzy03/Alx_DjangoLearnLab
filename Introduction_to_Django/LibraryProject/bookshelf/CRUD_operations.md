@@ -1,12 +1,14 @@
 ## Create Book
 from bookshielf.models import Book
 
-Book.objects.create(title= "1984", author= "George Orwell", publication_date= "1949")
+Book.objects.create(title= "1984", author= "George Orwell", publication_year= 1949)
+
+output: <Book: 1984 by George Orwell (1949)>
 
 ## Retrieve Book
-Book.objects.all()
+Book.objects.get(title="1984")
 
-output: <QuerySet [<Book: 1984 by George Orwell (1949)>]>
+output: <Book: 1984 by George Orwell (1949)>
 
 ## Update Book
 book = Book.objects.get(id=1)
