@@ -18,7 +18,7 @@ def index(request):
 def list_books(request):
     books = Book.objects.all()
     context = {'books': books}
-    return render(request, '../relationship_app/list_books.html', context)
+    return render(request, 'relationship_app/list_books.html', context)
 
 # def login_view(request):
 #     if request.method == 'POST':
@@ -39,7 +39,7 @@ def list_books(request):
         
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = '../relationship_app/library_detail.html'
+    template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
     def get_context_data(self, **kwargs):
@@ -50,14 +50,14 @@ class LibraryDetailView(DetailView):
 
 class RegisterUserView(CreateView):
     form_class = UserCreationForm
-    template_name = 'register.html'
+    template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
 
 class Login_view(LoginView):
-    template_name = 'login.html'
+    template_name = 'relationship_app/login.html'
     
     def get_success_url(self):
         return reverse_lazy('index')
 
 class Logout_view(LogoutView):
-    template_name = 'logout.html'
+    template_name = 'relationship_app/logout.html'
