@@ -37,7 +37,7 @@ def list_books(request):
 #     messages.success(request, 'You have been logged out')
 #     return redirect(login_view)
         
-class Librarybook(DetailView):
+class LibraryDetailView(DetailView):
     model = Library
     template_name = '../relationship_app/library_detail.html'
     context_object_name = 'library'
