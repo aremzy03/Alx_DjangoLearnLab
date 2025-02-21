@@ -12,7 +12,7 @@ from .models import Library, Book
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'relationship_app/index.html')
 
 
 def list_books(request):
