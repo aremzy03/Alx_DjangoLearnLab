@@ -18,7 +18,7 @@ def index(request):
 def display_books(request):
     books = Book.objects.all()
     context = {'books': books}
-    return render(request, 'book_list.html', context)
+    return render(request, '../relationship_app/list_books.html', context)
 
 # def login_view(request):
 #     if request.method == 'POST':
@@ -39,7 +39,7 @@ def display_books(request):
         
 class Librarybook(DetailView):
     model = Library
-    template_name = 'library_book.html'
+    template_name = '../relationship_app/library_detail.html'
     context_object_name = 'library'
 
     def get_context_data(self, **kwargs):
