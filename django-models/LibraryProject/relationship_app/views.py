@@ -53,11 +53,11 @@ class RegisterUserView(CreateView):
     template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
 
-class Login_view(LoginView):
-    template_name = 'relationship_app/login.html'
+# class Login_view(LoginView):
+#     template_name = 'relationship_app/login.html'
     
-    def get_success_url(self):
-        return reverse_lazy('index')
+#     def get_success_url(self):
+#         return reverse_lazy('index')
 
-class Logout_view(LogoutView):
-    template_name = 'relationship_app/logout.html'
+# class Logout_view(LogoutView):
+#     template_name = 'relationship_app/logout.html'
