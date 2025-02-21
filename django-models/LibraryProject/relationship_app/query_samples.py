@@ -10,5 +10,5 @@ def retrieve_Library():
     Library.objects.all()
 
 def get_librarian():
-    library = input("What Librarian are you looking for?")
-    Librarian.objects.get(library = library)
+    library_name = input("What Librarian are you looking for?")
+    Librarian.objects.get(library =library_name)
