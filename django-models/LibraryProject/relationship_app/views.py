@@ -2,11 +2,14 @@ from django.shortcuts import render #, redirect
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
-from .models import Library, Book
+from django.http import HttpResponse
+from .models import Library, Book, UserProfile
+from .signals import *
 
 # Create your views here.
 
@@ -61,3 +64,19 @@ class RegisterUserView(CreateView):
 
 # class Logout_view(LogoutView):
 #     template_name = 'relationship_app/logout.html'
+
+def is_admin(user):
+    if user.role == 'admin':
+        return
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    return HttpResponse("This is an admin View")
+
+def is_librarian(user):
+    if user.role == 'librarian':
+        return
+
+@user_passes_test(is_librarian)
+def librarian_view(user):
+    return HttpResponse("This is a Librarian View")
