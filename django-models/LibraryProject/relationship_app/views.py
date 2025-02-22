@@ -3,12 +3,13 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import Permission
 from django.contrib import messages
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse
-from .models import Library, Book, UserProfile
+from .models import Library, Book, UserProfile, Author, Librarian, User
 from .signals import *
 
 # Create your views here.
@@ -80,3 +81,46 @@ def is_librarian(user):
 @user_passes_test(is_librarian)
 def librarian_view(user):
     return HttpResponse("This is a Librarian View")
+
+def assign_permissions_add():
+    user = User.objects.get(username="admin")
+    permission = Permission.objects.get(codename='can_add_book')
+    user.user_permissions.add(permission)
+
+def assign_permissions_change():
+    user = User.objects.get(username="admin")
+    permission = Permission.objects.get(codename='can_change_book')
+    user.user_permissions.add(permission)
+
+def assign_permissions_delete():
+    user = User.objects.get(username="admin")
+    permission = Permission.objects.get(codename='can_delete_book')
+    user.user_permissions.add(permission)
+
+@permission_required("relationship_app.can_add_book", raise_exception=True)
+def create_book(request):
+    author = Author.objects.create(name="New Author")
+    book = Book.objects.create(title="New Book", author=author)
+    library = Library.objects.get(name="Abuja")
+    library.books.add(book)
+    books = Book.objects.all()
+    context = {'books': books}
+    return render(request, 'relationship_app/list_books.html', context)
+
+@permission_required("relationship_app.can_change_book", raise_exception=True)
+def change_book(request):
+    book = Book.objects.get(title="")
+    book.title = ""
+    book.save()
+    books = Book.objects.all()
+    context = {'books': books}
+    return render(request, 'relationship_app/list_books.html', context)
+
+@permission_required("relationship_app.can_delete_book", raise_exception=True)
+def delete_book(request):
+    book = Book.objects.get(title="")
+    if book:
+        book.delete()
+    books = Book.objects.all()
+    context = {'books': books}
+    return render(request, 'relationship_app/list_books.html', context)
