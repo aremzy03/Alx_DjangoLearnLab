@@ -80,6 +80,13 @@ def is_librarian(user):
 def librarian_view(user):
     return HttpResponse("This is a Librarian View")
 
+def is_member(user):
+    return user.is_authenticated and user.userprofile.role == 'member'
+
+@user_passes_test(is_librarian, login_url='/login/')
+def member_view(user):
+    return HttpResponse("This is a Member View")
+
 def assign_permissions_add():
     user = User.objects.get(username="admin")
     permission = Permission.objects.get(codename='can_add_book')
