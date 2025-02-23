@@ -53,7 +53,7 @@ class LibraryDetailView(DetailView):
 
 
 class RegisterUserView(CreateView):
-    form_class = UserCreationForm()
+    form_class = UserCreationForm
     template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
 
@@ -67,18 +67,16 @@ class RegisterUserView(CreateView):
 #     template_name = 'relationship_app/logout.html'
 
 def is_admin(user):
-    if user.role == 'admin':
-        return
+    return user.is_authenticated and user.userprofile.role == 'admin'
 
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, login_url='/login/')
 def admin_view(request):
-    return HttpResponse("This is an admin View")
+    return render(request, 'relationship_app/admin.html')
 
 def is_librarian(user):
-    if user.role == 'librarian':
-        return
+    return user.is_authenticated and user.userprofile.role == 'librarian'
 
-@user_passes_test(is_librarian)
+@user_passes_test(is_librarian, login_url='/login/')
 def librarian_view(user):
     return HttpResponse("This is a Librarian View")
 
@@ -118,7 +116,7 @@ def change_book(request):
 
 @permission_required("relationship_app.can_delete_book", raise_exception=True)
 def delete_book(request):
-    book = Book.objects.get(title="")
+    book = Book.objects.get(id=10)
     if book:
         book.delete()
     books = Book.objects.all()
