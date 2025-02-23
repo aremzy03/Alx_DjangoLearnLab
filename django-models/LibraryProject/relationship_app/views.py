@@ -1,15 +1,15 @@
 from django.shortcuts import render #, redirect
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout
+#from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Permission
 from django.contrib import messages
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required
-from django.http import HttpResponse
-from .models import Library, Book, UserProfile, Author, Librarian, User
+#from django.http import HttpResponse
+from .models import Library, Book, Author, User
 from .signals import *
 
 # Create your views here.
