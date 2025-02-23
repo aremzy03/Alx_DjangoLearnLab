@@ -71,21 +71,21 @@ def is_admin(user):
 
 @user_passes_test(is_admin, login_url='/login/')
 def admin_view(request):
-    return render(request, 'relationship_app/admin.html')
+    return render(request, 'relationship_app/admin_view.html')
 
 def is_librarian(user):
     return user.is_authenticated and user.userprofile.role == 'librarian'
 
 @user_passes_test(is_librarian, login_url='/login/')
-def librarian_view(user):
-    return HttpResponse("This is a Librarian View")
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
 
 def is_member(user):
     return user.is_authenticated and user.userprofile.role == 'member'
 
 @user_passes_test(is_librarian, login_url='/login/')
-def member_view(user):
-    return HttpResponse("This is a Member View")
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
 
 def assign_permissions_add():
     user = User.objects.get(username="admin")
