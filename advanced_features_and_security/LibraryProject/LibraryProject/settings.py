@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Security',
+        'NAME': 'Relationship',
         'USER': 'root',
         'PASSWORD': 'aremzyboss',
         'PORT': 3306,
@@ -130,5 +130,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/'
-
-AUTH_USER_MODEL = "relationship_app.CustomUser"

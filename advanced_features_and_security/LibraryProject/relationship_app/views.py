@@ -3,13 +3,13 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 #from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import Permission
 from django.contrib import messages
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required
-from django.http import HttpResponse
-from .models import Library, Book, Author, CustomUser
+#from django.http import HttpResponse
+from .models import Library, Book, Author, User
 from .signals import *
 
 # Create your views here.
@@ -23,6 +23,23 @@ def list_books(request):
     books = Book.objects.all()
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
+
+# def login_view(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect('index')
+#         else:
+#             messages.error(request, 'Username or Password is incorrect')
+#     return render(request, 'login.html')
+
+# def logout_view(request):
+#     logout(request)
+#     messages.success(request, 'You have been logged out')
+#     return redirect(login_view)
         
 class LibraryDetailView(DetailView):
     model = Library
@@ -36,9 +53,18 @@ class LibraryDetailView(DetailView):
 
 
 class RegisterUserView(CreateView):
-    form_class = UserCreationForm
+    form_class = UserCreationForm()
     template_name = 'relationship_app/register.html'
     success_url = reverse_lazy('login')
+
+# class Login_view(LoginView):
+#     template_name = 'relationship_app/login.html'
+    
+#     def get_success_url(self):
+#         return reverse_lazy('index')
+
+# class Logout_view(LogoutView):
+#     template_name = 'relationship_app/logout.html'
 
 def is_admin(user):
     return user.is_authenticated and user.userprofile.role == 'admin'
@@ -62,45 +88,21 @@ def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
 def assign_permissions_add():
-    user = CustomUser.objects.get(username="admin")
+    user = User.objects.get(username="admin")
     permission = Permission.objects.get(codename='can_add_book')
     user.user_permissions.add(permission)
 
 def assign_permissions_change():
-    user = CustomUser.objects.get(username="admin")
+    user = User.objects.get(username="admin")
     permission = Permission.objects.get(codename='can_change_book')
     user.user_permissions.add(permission)
 
 def assign_permissions_delete():
-    user = CustomUser.objects.get(username="admin")
+    user = User.objects.get(username="admin")
     permission = Permission.objects.get(codename='can_delete_book')
     user.user_permissions.add(permission)
 
-"""
-Creating Groups and Assingning Permissions
-The following code snippet creates three groups: Editors, Viewers, and Admins.
-The Editors group has the permissions to view, change, and edit books using the can_view, can_change, and can_edit code_names.
-The Viewers group only has the permission to view books using the can_view codename.
-The Admins group has all the permissions.
-The code snippet assigns the permissions to the groups.
-
-"""
-# Create groups
-editor, created = Group.objects.get_or_create(name='Editors')
-viewer, created = Group.objects.get_or_create(name='Viewers')
-admin, created = Group.objects.get_or_create(name='Admins')
-# Assign permissions to groups
-#editor
-permissions_editor = Permission.objects.filter(codename__in=['can_view', 'can_change', 'can_edit'])
-editor.permissions.add(*permissions_editor)
-#viewer
-permissions_viewer = Permission.objects.filter(codename__in=['can_view'])
-viewer.permissions.add(*permissions_viewer)
-#Admin
-permissions_admin = Permission.objects.all()
-admin.permissions.add(*permissions_admin)
-
-@permission_required("relationship_app.can_create", raise_exception=True)
+@permission_required("relationship_app.can_add_book", raise_exception=True)
 def create_book(request):
     author = Author.objects.create(name="New Author")
     book = Book.objects.create(title="New Book", author=author)
@@ -110,7 +112,7 @@ def create_book(request):
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
 
-@permission_required("relationship_app.can_change", raise_exception=True)
+@permission_required("relationship_app.can_change_book", raise_exception=True)
 def change_book(request):
     book = Book.objects.get(title="")
     book.title = ""
@@ -119,7 +121,7 @@ def change_book(request):
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
 
-@permission_required("relationship_app.can_delete", raise_exception=True)
+@permission_required("relationship_app.can_delete_book", raise_exception=True)
 def delete_book(request):
     book = Book.objects.get(id=10)
     if book:
@@ -127,19 +129,3 @@ def delete_book(request):
     books = Book.objects.all()
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
-
-@permission_required("relationship_app.can_view", raise_exception=True)
-def view_book(request):
-    book = Book.objects.get(id=3)
-    # context = {'book': book}
-    # return render(request, 'relationship_app/list_books.html', context)
-    return HttpResponse(book)
-
-@permission_required("relationship_app.can_edit", raise_exception=True)
-def edit_book(request):
-    book = Book.objects.get(title="book1")
-    book.title = "book2"
-    book.author = Author.objects.get(name="first author")
-    book.save()
-    return HttpResponse(book)
-    

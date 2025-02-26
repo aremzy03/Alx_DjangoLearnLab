@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import list_books, index, LibraryDetailView, RegisterUserView, admin_view, librarian_view, member_view, create_book, change_book, delete_book, view_book, edit_book #, Login_view, Logout_view
+from .views import list_books, index, LibraryDetailView, RegisterUserView, admin_view, librarian_view, member_view, create_book, change_book, delete_book #, Login_view, Logout_view
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -18,6 +18,4 @@ urlpatterns = [
     path("add_book/", create_book, name="create_book"),
     path("edit_book/", change_book, name="edit_book"),
     path("delete_book/", delete_book, name="delete_book"),
-    path("edit_book/", edit_book, name="edit_book"),
-    path("view_book/", view_book, name="view_book"),
-]
+    ]
