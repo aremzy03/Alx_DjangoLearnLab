@@ -34,7 +34,8 @@ def assign_permissions(request):
 @permission_required('bookshelf.can_view', raise_exception=True)
 def view_book(request):
     book = Book.objects.get(title="")
-    return HttpResponse(book)
+    context = {'book': book}
+    return render(request, 'bookshelf/list_book.html', context)
 
 @permission_required('bookshelf.can_create', raise_exception=True)
 def create_book(request):
