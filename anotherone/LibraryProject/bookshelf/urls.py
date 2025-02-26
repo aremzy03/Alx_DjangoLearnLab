@@ -7,4 +7,3 @@ urlpatterns = [
     path("edit_book/", edit_book, name="edit_book"),
 	path("delete_book/", delete_book, name="delete_book"),
 ]
-

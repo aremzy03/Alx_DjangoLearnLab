@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from bookshelf.models import CustomUser
+from django.conf import settings
 
 # Create your models here.
 
@@ -14,7 +15,7 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    
+
     class Meta:
         permissions = [
             ('can_add_book', 'Can add book'),
@@ -43,12 +44,13 @@ class Librarian(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=[
         ('admin', 'Admin'),
         ('librarian', 'Librarian'),
         ('member', 'Member'),
-    ], default = 'member')
-    
+    ], default='member')
+
     def __str__(self):
         return self.user.username
