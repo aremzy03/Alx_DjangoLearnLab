@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.models import Permission, Group
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse
-from .models import Book, CustomUser
+from .models import Book
+from .forms import ExampleForm
 
 # Create your views here.
 """
