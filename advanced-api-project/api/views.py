@@ -115,6 +115,8 @@ class DeleteView(mixins.DestroyModelMixin, generics.GenericAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'title'
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
