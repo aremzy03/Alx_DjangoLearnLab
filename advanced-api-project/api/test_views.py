@@ -86,7 +86,7 @@ class TestViewsAuth(APITestCase):
         self.book = Book.objects.create(title='The Book', publication_year=2020, author=self.author)
         
     def test_create_view_auth(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='user', password='user123')
         url = reverse('book-create')
         data = {
                 'title': 'The Book',
