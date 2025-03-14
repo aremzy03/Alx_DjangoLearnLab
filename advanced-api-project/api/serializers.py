@@ -22,7 +22,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = ['name']
     
 class BookSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all())
+    author = AuthorSerializer(many=True, read_only=True)
     
     class Meta:
         model = Book
