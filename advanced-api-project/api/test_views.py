@@ -64,8 +64,8 @@ class TestViews(APITestCase):
         data = {'title': 'The Book', 'publication_year': 2020, 'author_id': self.author.id}
         response = self.client.post(url, data, format='json')
         #print(response.data)
-        #self.assertEqual(str(response.data), "{'detail': ErrorDetail(string='Authentication credentials were not provided.', code='not_authenticated')}")
-        self.assertEqual(str(response.data), status.HTTP_403_FORBIDDEN) 
+        self.assertEqual(str(response.data), "{'detail': ErrorDetail(string='Authentication credentials were not provided.', code='not_authenticated')}")
+        #self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) 
 
     def test_update_view(self):
         url = reverse('book-update', kwargs={'pk': self.book.id})
