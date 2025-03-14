@@ -63,7 +63,8 @@ class TestViews(APITestCase):
         url = reverse('book-create')
         data = {'title': 'The Book', 'publication_year': 2020, 'author_id': self.author.id}
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) 
 
     def test_update_view(self):
         url = reverse('book-update', kwargs={'pk': self.book.id})
