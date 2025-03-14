@@ -7,7 +7,7 @@ from datetime import datetime, date
 	AuthorSerialiszer and BookSerializer takes the author and Book models to convert them to
 	json data
  	
-	BookSerilozer.validate:
+	BookSerilizer.validate:
 		checks if the publication year of the book is valid
     Raises:
 		serializers.ValidationError: raises an error when publication year is in the future

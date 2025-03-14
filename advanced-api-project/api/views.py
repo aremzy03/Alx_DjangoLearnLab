@@ -32,7 +32,8 @@ class ListView(mixins.ListModelMixin, generics.GenericAPIView):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['title', 'publication_year', 'author']
     search_fileds = ['title', 'author']
-    ordering_fields = ['title', 'publication_year', 'author']    
+    ordering_fields = ['title', 'publication_year', 'author']
+       
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
