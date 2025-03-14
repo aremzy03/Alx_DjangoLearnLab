@@ -61,13 +61,13 @@ class TestViews(APITestCase):
 
     def test_create_view(self):
         url = reverse('book-create')
-        data = {'title': 'The Book', 'publication_year': 2020, 'author': self.author.id}
+        data = {'title': 'The Book', 'publication_year': 2020, 'author_id': self.author.id}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_view(self):
         url = reverse('book-update', kwargs={'pk': self.book.id})
-        data =  {'title': 'The Book', 'publication_year': 2020, 'author': self.author.id}
+        data =  {'title': 'The Book', 'publication_year': 2020, 'author_id': self.author.id}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -90,7 +90,7 @@ class TestViewsAuth(APITestCase):
         data = {
                 'title': 'The Book',
                 'publication_year': 2020,
-                'author': self.author.id
+                'author_id': self.author.id
                 }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -101,7 +101,7 @@ class TestViewsAuth(APITestCase):
         data = {
                 'title': 'The Book',
                 'publication_year': 2020,
-                'author': self.author.id
+                'author_id': self.author.id
                 }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

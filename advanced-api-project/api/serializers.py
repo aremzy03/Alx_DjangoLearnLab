@@ -22,11 +22,12 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = ['name']
     
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(many=True, read_only=True)
+    author = AuthorSerializer(read_only=True) #AuthorSerializer(read_only=True, many=True)
+    author_id = serializers.PrimaryKeyRelatedField(queryset=Author.objects.all(), write_only=True, source='author')
     
     class Meta:
         model = Book
-        fields = ['title', 'publication_year', 'author']
+        fields = ['title', 'publication_year', 'author', 'author_id']
         
     def validate(self, data):
         year = date.today().year
