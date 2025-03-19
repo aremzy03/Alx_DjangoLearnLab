@@ -75,7 +75,7 @@ def viewprofile(request):
 
 class CreatePost(LoginRequiredMixin, CreateView):
     model = Post
-    template_name = 'blog/create_post.html'
+    template_name = 'blog/post_form.html'
     fields = ['title', 'content', 'author']
     success_url = reverse_lazy('home')
 
@@ -94,7 +94,7 @@ class DetailPost(DetailView):
 
 class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    template_name = 'blog/edit_post.html'
+    template_name = 'blog/post_form.html'
     fields = ['title', 'content']
     success_url = reverse_lazy('home')
 
