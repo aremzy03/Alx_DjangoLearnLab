@@ -56,7 +56,7 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.userprofile
-
+    #POST method save()
 
 @login_required
 def viewprofile(request):
