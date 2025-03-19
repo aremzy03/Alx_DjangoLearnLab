@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+{% if name %}
+	<img>{{ profilepic }}</img>
+	<h1>Welcome, {{ name }}!!!</h1>
+{% else %}
+	<h1>No User</h1>
+{% endif %}
+	
+	<p>{{ bio }}</p>
+	
+{% endblock %}

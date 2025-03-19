@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +15,7 @@
                 <li><a href="{% url 'posts' %}">Blog Posts</a></li>
                 <li><a href="{% url 'login' %}">Login</a></li>
                 <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'create-post' %}">New Post</a></li>
             </ul>
         </nav>
     </header>
@@ -23,7 +25,7 @@
         <!-- Page-specific content goes here -->
         {% endblock %}
     </div>
-
+    <button class="content"><a href="{% url 'logout' %}">Logout</a></button>
     <footer>
         <p>&copy; 2024 Django Blog</p>
     </footer>
