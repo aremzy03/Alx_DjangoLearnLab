@@ -70,31 +70,31 @@ def viewprofile(request):
         template = 'blog/profile.html'
         return render(request, template, context)
 
-# Blog Views
+# Post Views
 
 
 class CreatePost(LoginRequiredMixin, CreateView):
     model = Post
-    template_name = 'blog/createpost.html'
+    template_name = 'blog/create_post.html'
     fields = ['title', 'content', 'author']
     success_url = reverse_lazy('home')
 
 
 class ListPost(ListView):
     model = Post
-    template_name = 'blog/posts.html'
+    template_name = 'blog/list_post.html'
     context_object_name = 'posts'
 
 
 class DetailPost(DetailView):
     model = Post
-    template_name = 'blog/post.html'
+    template_name = 'blog/detail_post.html'
     context_object_name = 'post'
 
 
 class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    template_name = 'blog/updatepost.html'
+    template_name = 'blog/edit_post.html'
     fields = ['title', 'content']
     success_url = reverse_lazy('home')
 
