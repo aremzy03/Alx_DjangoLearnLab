@@ -18,8 +18,8 @@ urlpatterns = [
 
     # Posts CRUD urls
     path('posts/', ListPost.as_view(), name='posts'),
-    path('posts/new/', CreatePost.as_view(), name='create-post'),
-    path('posts/<int:pk>/', DetailPost.as_view(), name='detail-post'),
-    path('posts/<int:pk>/edit', UpdatePost.as_view(), name='edit-post'),
-    path('posts/<int:pk>/delete', PostDeleteView.as_view(), name='delete-post')
+    path('post/new/', CreatePost.as_view(), name='create-post'),
+    path('post/<int:pk>/', DetailPost.as_view(), name='detail-post'),
+    path('post/<int:pk>/edit', UpdatePost.as_view(), name='edit-post'),
+    path('post/<int:pk>/delete', PostDeleteView.as_view(), name='delete-post')
 ]
