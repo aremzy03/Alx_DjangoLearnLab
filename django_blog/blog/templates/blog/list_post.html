@@ -3,11 +3,12 @@
 {% block content %}
 {% for post in posts %}
 
-<ul>	
-	<li><h2>Title: {{ post.title }}</h2></li>
-	<li><p>Author: {{ post.author }}</p></li>
-	<li><button><a href="{% url 'detail-post' pk=post.id %}">read more..</a></button></li>
-</ul>
+	
+	<h2>Title: {{ post.title }}</h2>
+	<p>Author: {{ post.author }}</p>
+	<p>Author: {{ post.content| truncatewords:10 }}</p>
+	<button><a href="{% url 'detail-post' pk=post.id %}">read more..</a></button>
+
 <p>==============================================</p>
 {% endfor %}
 {% endblock %}
