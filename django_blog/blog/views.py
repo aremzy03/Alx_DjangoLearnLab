@@ -113,7 +113,7 @@ class DetailPost(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["comments"] = Comments.objects.filter(post=self.get_object())
+        context["comments"] = Comment.objects.filter(post=self.get_object())
         return context
     
 
@@ -147,7 +147,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @login_required(login_url=reverse_lazy('login'))
 def commentform(request, pk):
     post  = get_object_or_404(Post, pk=pk)
-    comments = Comments.objects.filter(post=post)
+    comments = Comment.objects.filter(post=post)
     template = 'blog/detail_post.html'
     
     if request.method == 'POST':
@@ -182,19 +182,19 @@ def commentform(request, pk):
 #     return render(request, template, context)
 
 class CommentsUpdateView(UpdateView):
-    model = Comments
+    model = Comment
     template_name = "blog/update_comment.html"
     fields = ['content']
     success_url = reverse_lazy('posts')
 
 
 class  CommentListView(ListView):
-    model = Comments
+    model = Comment
     template_name = "blog/detail_post.html"
     context_object_name = 'comments'
 
 class CommentsDeleteView(DeleteView):
-    model = Comments
+    model = Comment
     template_name = "blog/delete_comment.html"
     success_url = reverse_lazy('posts')
 
