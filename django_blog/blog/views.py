@@ -20,7 +20,7 @@ def home(request):
 class UserRegister(CreateView):
     form_class = UserCreationForm
     template_name = 'blog/register.html'
-    
+
     def get_success_url(self):
         return reverse_lazy('create-profile')
 
@@ -36,10 +36,12 @@ class UserLogin(LoginView):
     success_url = reverse_lazy('viewprofile')
     next_page = success_url
 
+
 class UserLogout(LogoutView):
     template_name = 'blog/logout.html'
     success_url = reverse_lazy('home')
-    #next_page = success_url
+    # next_page = success_url
+
 
 class CreateProfile(LoginRequiredMixin, CreateView):
     model = UserProfile
@@ -47,10 +49,12 @@ class CreateProfile(LoginRequiredMixin, CreateView):
     fields = '__all__'
     success_url = reverse_lazy('home')
 
+
 class UpdateProfile(LoginRequiredMixin, UpdateView):
     model = UserProfile
     template_name = "blog/updateprofile.html"
     fields = ['name', 'email', 'profileimg', 'bio']
+
     def get_success_url(self):
         if self.request.user.userprofile:
             return reverse_lazy('viewprofile')
@@ -59,7 +63,8 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user.userprofile
-    #POST method save()
+    # POST method save()
+
 
 @login_required(login_url=reverse_lazy('login'))
 def viewprofile(request):
@@ -83,6 +88,7 @@ class CreatePost(LoginRequiredMixin, CreateView):
     fields = ['title', 'content', 'author']
     success_url = reverse_lazy('home')
 
+
 @login_required(login_url=reverse_lazy('login'))
 def createpost(request):
     post = Post.objects.create()
@@ -96,7 +102,7 @@ def createpost(request):
             return redirect('detail-post', pk=post.pk)
     else:
         form = PostForm()
-    context = {'post':post, 'form':form}
+    context = {'post': post, 'form': form}
     return render(request, template, context)
 
 
@@ -110,12 +116,11 @@ class DetailPost(DetailView):
     model = Post
     template_name = 'blog/detail_post.html'
     context_object_name = 'post'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["comments"] = Comment.objects.filter(post=self.get_object())
         return context
-    
 
 
 class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -126,7 +131,6 @@ class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'content']
     success_url = reverse_lazy('home')
 
-    
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
@@ -138,18 +142,20 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'blog/delete_post.html'
     success_url = reverse_lazy('home')
-    
+
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
 
 # Comment Views
+
+
 @login_required(login_url=reverse_lazy('login'))
 def commentform(request, pk):
-    post  = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Post, pk=pk)
     comments = Comment.objects.filter(post=post)
     template = 'blog/detail_post.html'
-    
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid:
@@ -160,14 +166,14 @@ def commentform(request, pk):
             return redirect('detail-post', pk=post.pk)
     else:
         form = CommentForm()
-    context = {'post':post, 'comments':comments, 'form':form}
+    context = {'post': post, 'comments': comments, 'form': form}
     return render(request, template, context)
 
 # def updatecomment(request, pk, pk2):
 #     post = get_object_or_404(Post, pk=pk)
 #     comment = get_object_or_404(Comments, pk=pk2)
 #     template = 'blog/detail_post.html'
-    
+
 #     if request.method=='PUT':
 #         form = CommentForm(request.PUT)
 #         if form.is_valid:
@@ -181,11 +187,13 @@ def commentform(request, pk):
 #     context = {'post':post, 'comment':comment, 'form':form}
 #     return render(request, template, context)
 
+
 class CommentUpdateView(UpdateView):
     model = Comment
     template_name = "blog/comment_form.html"
     fields = ['content']
     success_url = reverse_lazy('posts')
+
 
 class CommentCreateView(CreateView):
     model = Comment
@@ -194,15 +202,13 @@ class CommentCreateView(CreateView):
     success_url = reverse_lazy('posts')
 
 
-class  CommentListView(ListView):
+class CommentListView(ListView):
     model = Comment
     template_name = "blog/detail_post.html"
     context_object_name = 'comments'
+
 
 class CommentDeleteView(DeleteView):
     model = Comment
     template_name = "blog/delete_comment.html"
     success_url = reverse_lazy('posts')
-
-
-
