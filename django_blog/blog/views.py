@@ -181,10 +181,16 @@ def commentform(request, pk):
 #     context = {'post':post, 'comment':comment, 'form':form}
 #     return render(request, template, context)
 
-class CommentsUpdateView(UpdateView):
+class CommentUpdateView(UpdateView):
     model = Comment
-    template_name = "blog/update_comment.html"
+    template_name = "blog/comment_form.html"
     fields = ['content']
+    success_url = reverse_lazy('posts')
+
+class CommentCreateView(CreateView):
+    model = Comment
+    template_name = "comment_form.html"
+    fields = '__all__'
     success_url = reverse_lazy('posts')
 
 
@@ -193,7 +199,7 @@ class  CommentListView(ListView):
     template_name = "blog/detail_post.html"
     context_object_name = 'comments'
 
-class CommentsDeleteView(DeleteView):
+class CommentDeleteView(DeleteView):
     model = Comment
     template_name = "blog/delete_comment.html"
     success_url = reverse_lazy('posts')
