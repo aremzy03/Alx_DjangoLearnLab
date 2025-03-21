@@ -221,7 +221,7 @@ class CommentUpdateView(UpdateView):
 
 class CommentCreateView(CreateView):
     model = Comment
-    template_name = "comment_form.html"
+    template_name = "blog/comment_form.html"
     fields = '__all__'
     success_url = reverse_lazy('posts')
 
