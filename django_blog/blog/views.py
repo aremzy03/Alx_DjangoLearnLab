@@ -126,7 +126,7 @@ class TagListPost(ListView):
 
     def get_queryset(self):
         tag_name = self.kwargs.get('tag')
-        return Post.objects.filter(tag__name__icontains=tag_name)
+        return Post.objects.filter(tags__name__icontains=tag_name)
 
 
 class DetailPost(DetailView):
