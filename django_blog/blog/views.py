@@ -119,7 +119,7 @@ class ListPost(ListView):
     context_object_name = 'posts'
 
 
-class TagListPost(ListView):
+class PostByTagListPost(ListView):
     model = Post
     template_name = 'blog/list_post.html'
     context_object_name = 'posts'
@@ -145,8 +145,8 @@ class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     permission_denied_message = "You can't access this content"
     model = Post
     template_name = 'blog/post_form.html'
-    fields = ['title', 'content', 'tag']
-    success_url = reverse_lazy('home')
+    fields = ['title', 'content', 'tags']
+    success_url = reverse_lazy('posts')
 
     def test_func(self):
         post = self.get_object()
@@ -169,7 +169,7 @@ class SearchPostList(ListPost):
 
     def get_queryset(self):
         search = self.request.GET.get('search')
-        return Post.objects.filter(Q(tag__name__icontains=search) | Q(title__icontains=search) | Q(content__icontains=search))
+        return Post.objects.filter(Q(tags__name__icontains=search) | Q(title__icontains=search) | Q(content__icontains=search))
 
 # Comment Views
 

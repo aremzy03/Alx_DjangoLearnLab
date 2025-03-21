@@ -24,7 +24,7 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='delete-post'),
 
     # search and tags filter
-    path('tags/<str:tag>/', TagListPost.as_view(), name='tag-list'),
+    path('tags/<slug:tag_slug>/', PostByTagListPost.as_view(), name='tag-list'),
     path('search/', SearchPostList.as_view(), name='search-post'),
 
     # Comments CRUD urls
