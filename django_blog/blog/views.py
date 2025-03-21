@@ -119,7 +119,7 @@ class ListPost(ListView):
     context_object_name = 'posts'
 
 
-class PostByTagListPost(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = 'blog/list_post.html'
     context_object_name = 'posts'
