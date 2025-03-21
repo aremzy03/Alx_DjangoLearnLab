@@ -17,3 +17,4 @@ class PostForm(forms.ModelForm):
 #     class Meta:
 #         model = Tag
 #         fields = ['name']
+# TagWidget('Tags', 'widgets')
