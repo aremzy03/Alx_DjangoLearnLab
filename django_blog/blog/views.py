@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.urls import reverse, reverse_lazy
 from .models import *
 from .forms import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 # Create your views here.
 
 # Home View
@@ -88,6 +89,12 @@ class CreatePost(LoginRequiredMixin, CreateView):
     fields = ['title', 'content', 'author']
     success_url = reverse_lazy('home')
 
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        form.save_m2m()
+        return super().form_valid(form)
+
 
 @login_required(login_url=reverse_lazy('login'))
 def createpost(request):
@@ -112,6 +119,16 @@ class ListPost(ListView):
     context_object_name = 'posts'
 
 
+class TagListPost(ListView):
+    model = Post
+    template_name = 'blog/list_post.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag')
+        return Post.objects.filter(tag__name__icontains=tag_name)
+
+
 class DetailPost(DetailView):
     model = Post
     template_name = 'blog/detail_post.html'
@@ -128,7 +145,7 @@ class UpdatePost(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     permission_denied_message = "You can't access this content"
     model = Post
     template_name = 'blog/post_form.html'
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'tag']
     success_url = reverse_lazy('home')
 
     def test_func(self):
@@ -146,6 +163,13 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+
+
+class SearchPostList(ListPost):
+
+    def get_queryset(self):
+        search = self.request.GET.get('search')
+        return Post.objects.filter(Q(tag__name__icontains=search) | Q(title__icontains=search) | Q(content__icontains=search))
 
 # Comment Views
 

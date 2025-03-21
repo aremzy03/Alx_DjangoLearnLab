@@ -4,6 +4,12 @@
 	<h2>{{ post.title }}</h2>
 	<p>{{ post.content }}</p>
 	<p>{{ post.author }}            {{ post.published_date }}</p>
+	<h3>Tags</h3>
+	{% for tag in post.tag.all %}
+		<li><a href="{% url 'tag-list' tag=tag %}">{{tag}}</a></li>
+	{% empty %}
+		<li>No tags</li>
+	{% endfor %}
 	{% if post %}
 		<button><a href="{% url 'delete-post' pk=post.id %}">Delete</a></button>
 		<button><a href="{% url 'edit-post' pk=post.id %}">Edit</a></button>

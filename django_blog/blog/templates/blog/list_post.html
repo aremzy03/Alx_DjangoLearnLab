@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Blog Posts{% endblock title %}
 {% block content %}
+<form action="{% url 'search-post' %}" method="get">
+	<input name="search" type="text" placeholder="Search">
+</form>
 {% for post in posts %}
 
 	

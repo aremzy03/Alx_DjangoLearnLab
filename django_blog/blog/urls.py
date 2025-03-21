@@ -22,9 +22,15 @@ urlpatterns = [
     path('post/<int:pk>/', DetailPost.as_view(), name='detail-post'),
     path('post/<int:pk>/update/', UpdatePost.as_view(), name='edit-post'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='delete-post'),
-    
+
+    # search and tags filter
+    path('tags/<str:tag>/', TagListPost.as_view(), name='tag-list'),
+    path('search/', SearchPostList.as_view(), name='search-post'),
+
     # Comments CRUD urls
     path('post/<int:pk>/comments/new/', commentform, name='create-comment'),
-    path('post/comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='delete-comment'),
-    path('post/comment/<int:pk>/update/', CommentUpdateView.as_view(), name='edit-comment'),
+    path('post/comment/<int:pk>/delete/',
+         CommentDeleteView.as_view(), name='delete-comment'),
+    path('post/comment/<int:pk>/update/',
+         CommentUpdateView.as_view(), name='edit-comment'),
 ]
