@@ -10,7 +10,7 @@ class CustomUserSerilizer(serializers.ModelSerializer):
         fields = ['name', 'bio', 'profile_picture', 'followers']
 
 class UserLoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=150)
+    username = serializers.CharField()
     password = serializers.CharField(max_length=150, write_only=True)
     token = serializers.CharField(read_only=True)
     
@@ -26,3 +26,4 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user = validated_data['user']
         token,_ = Token.objects.get_or_create(user=user)
         return {'token': token.key}
+    #get_user_model().objects.create_user Token.objects.create
