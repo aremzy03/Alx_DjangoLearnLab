@@ -11,7 +11,7 @@ class CustomUserSerilizer(serializers.ModelSerializer):
         fields = ['bio', 'profile_picture', 'followers']
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=150, write_only=True)
+    password = serializers.CharField()
     
     class Meta:
         model = get_user_model()
@@ -22,4 +22,3 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = get_user_model().objects.create_user(**validated_data)
         token = Token.objects.create(user=user)
         return user
-    #get_user_model().objects.create_user Token.objects.create
