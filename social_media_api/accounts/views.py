@@ -8,7 +8,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView
 from rest_framework.authtoken.models import Token
 from .models import CustomUser
-from .serilizers import CustomUserSerilizer
+from .serializers import CustomUserSerilizer
 
 # Create your views here.
 
