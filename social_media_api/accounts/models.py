@@ -3,11 +3,14 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
-class CustomUser(models.Model, AbstractUser):
-    name = models.CharField(max_length=255)
-    bio = models.TextField()
-    profile_picture = models.ImageField(upload_to='profile_pictures/')
-    followers = models.ManyToManyField('self', symmetrical=False)
+class CustomUser(AbstractUser):
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='follwing', blank=True)
+    
+    groups = models.ManyToManyField('auth.Group', related_name='customuser_set', blank=True)
+    
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='customuser_permission', blank=True)
 
     def __str__(self):
-        return self.name
+        return self.username

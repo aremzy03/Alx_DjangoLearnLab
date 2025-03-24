@@ -7,8 +7,11 @@ from django.urls import reverse_lazy
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import CustomUser
-from .serializers import CustomUserSerilizer
+from .serializers import CustomUserSerilizer, UserLoginSerializer
 
 # Create your views here.
 
@@ -27,6 +30,13 @@ def create_token(request):
 class UserLogin(LoginView):
     template_name = ''
     success_url = reverse_lazy('profile')
+
+@api_view(['POST'])
+def login(request):
+    serializer = UserLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLogout(LogoutView):
