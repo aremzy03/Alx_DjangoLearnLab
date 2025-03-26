@@ -1,10 +1,11 @@
 from django.db import models
 from accounts.models import CustomUser
 # Create your models here.
+#content = models.TextField()
 class Post(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = models.TextField()
+    content = models.TextField(default="")
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     

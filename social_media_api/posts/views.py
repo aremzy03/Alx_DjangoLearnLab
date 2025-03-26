@@ -1,8 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
+from accounts.models import CustomUser
 from .models import Post, Comment
 from .serializers import CommentSerializer, PostSerializer
 
@@ -17,6 +19,20 @@ class PostViews(viewsets.ModelViewSet, PageNumberPagination):
     page_size = 5
     page_size_query_param = 'size'
     max_page_size = 100
+
+class FollowingPostViews(viewsets.ModelViewSet, PageNumberPagination):
+    serializer_class = PostSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'content', 'author']
+    page_size = 5
+    page_size_query_param = 'size'
+    max_page_size = 100
+    
+    def get_queryset(self):
+        user = self.request.user
+        following = CustomUser.objects.filter(followers=user)
+        return CustomUser.objects.filter(author__in=following)
+
 
 class CreatePost(generics.CreateAPIView, IsAuthenticated):
     queryset = Post.objects.all()

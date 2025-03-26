@@ -1,16 +1,18 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from .models import CustomUser
 from .serializers import CustomUserSerilizer, UserRegisterSerializer
 
 # Create your views here.
-
 
 class RegisterUser(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
@@ -62,3 +64,37 @@ class UpdateProfile(generics.UpdateAPIView):
 class ViewProfile(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerilizer
+
+# Follow Management Views
+class CustomPermission(IsAuthenticated):
+    def has_object_permission(self, request, view, obj):
+        if not request.user.is_authenticated:
+            return False
+        return request.user == obj.user
+
+class Follow(APIView):
+    permission_classes = [CustomPermission]
+    
+    def post(self, request, user_id):
+        follow = get_object_or_404(CustomUser, id=user_id)
+        user = request.user
+        if user == follow:
+            return Response({'error':"You can't follow your self"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.following.add(follow)
+        follow.followers.add(user)
+        return Response({'message':f"you're now following {follow.first_name}"}, status=status.HTTP_200_OK)
+
+class UnFollow(APIView):
+    permission_classes = [CustomPermission]
+    
+    
+    def post(self, request, user_id):
+        user = request.user
+        following = get_object_or_404(CustomUser, id=user_id)
+        if user == following:
+            return Response({'error':"You can't unfollow your self"}, status=status.HTTP_400_BAD_REQUEST)
+        user.following.remove(following)
+        following.followers.remove(user)
+        return Response({'message':f"you're now unfollowing {following.first_name}"}, status=status.HTTP_200_OK)
+    
