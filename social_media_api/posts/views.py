@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
@@ -21,6 +21,7 @@ class PostViews(viewsets.ModelViewSet, PageNumberPagination):
     max_page_size = 100
 
 class FollowingPostViews(viewsets.ModelViewSet, PageNumberPagination):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializer
     filter_backends = [SearchFilter]
     search_fields = ['title', 'content', 'author']
@@ -30,11 +31,12 @@ class FollowingPostViews(viewsets.ModelViewSet, PageNumberPagination):
     
     def get_queryset(self):
         user = self.request.user
-        following = CustomUser.objects.filter(followers=user)
-        return CustomUser.objects.filter(author__in=following)
+        profile = CustomUser.objects.get(user=user)
+        following_users = profile.following.all()
+        return Post.objects.filter(author__in=following_users).order_by("created_at")
 
 
-class CreatePost(generics.CreateAPIView, IsAuthenticated):
+class CreatePost(generics.CreateAPIView, permissions.IsAuthenticated):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     
@@ -45,14 +47,16 @@ class DetailPost(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-class DeletePost(generics.DestroyAPIView, IsAuthenticated):
+class DeletePost(generics.DestroyAPIView):
+    permission_classes = [ permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user
 
-class UpdatePost(generics.UpdateAPIView, IsAuthenticated):
+class UpdatePost(generics.UpdateAPIView):
+    permission_classes = [ permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     
@@ -60,7 +64,8 @@ class UpdatePost(generics.UpdateAPIView, IsAuthenticated):
         return obj.author == request.user
 
 #Comment 
-class CommentViews(viewsets.ModelViewSet, IsAuthenticated):
+class CommentViews(viewsets.ModelViewSet):
+    permission_classes = [ permissions.IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = PostSerializer
     
@@ -71,14 +76,16 @@ class ListComment(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
-class UpdateComment(generics.UpdateAPIView, IsAuthenticated):
+class UpdateComment(generics.UpdateAPIView):
+    permission_classes = [ permissions.IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user
 
-class DeleteComment(generics.DestroyAPIView, IsAuthenticated):
+class DeleteComment(generics.DestroyAPIView):
+    permission_classes = [ permissions.IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
