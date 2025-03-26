@@ -2,14 +2,14 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import viewsets
 from .models import Post, Comment
 from .serializers import CommentSerializer, PostSerializer
 
 
 # Create your views here.
 #Post CRUD Operations
-class PostViews(ModelViewSet, PageNumberPagination):
+class PostViews(viewsets.ModelViewSet, PageNumberPagination):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = [SearchFilter]
@@ -44,7 +44,7 @@ class UpdatePost(generics.UpdateAPIView, IsAuthenticated):
         return obj.author == request.user
 
 #Comment 
-class CommentViews(ModelViewSet, IsAuthenticated):
+class CommentViews(viewsets.ModelViewSet, IsAuthenticated):
     queryset = Comment.objects.all()
     serializer_class = PostSerializer
     
