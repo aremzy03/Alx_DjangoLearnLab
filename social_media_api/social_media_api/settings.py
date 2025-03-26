@@ -55,7 +55,9 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
-    ]
+    ],
+    'DEFAULT_PAGNATION_CLASS': 'rest_framework.pagnation.pagepagnation',
+    'PAGE_SIZE':10,
 }
 
 ROOT_URLCONF = 'social_media_api.urls'
