@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from rest_framework import viewsets
 from .models import CustomUser
 from .serializers import CustomUserSerilizer, UserRegisterSerializer
@@ -66,13 +66,13 @@ class ViewProfile(generics.RetrieveAPIView):
     serializer_class = CustomUserSerilizer
 
 # Follow Management Views
-class CustomPermission(IsAuthenticated):
+class CustomPermission(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         if not request.user.is_authenticated:
             return False
         return request.user == obj.user
 
-class Follow(APIView):
+class Follow(generics.GenericAPIView):
     permission_classes = [CustomPermission]
     
     def post(self, request, user_id):
@@ -85,7 +85,7 @@ class Follow(APIView):
         follow.followers.add(user)
         return Response({'message':f"you're now following {follow.first_name}"}, status=status.HTTP_200_OK)
 
-class UnFollow(APIView):
+class UnFollow(generics.GenericAPIView):
     permission_classes = [CustomPermission]
     
     
