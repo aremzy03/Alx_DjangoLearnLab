@@ -4,9 +4,9 @@ from .views import *
 
 # routers
 router = DefaultRouter()
-router.register(r'posts', PostViews, basename='post-views')
-router.register(r'comments', CommentViews, basename='comments')
-router.register(r'feed', FollowingPostViews, basename='following-views')
+router.register(r'posts/', PostViews, basename='post-views')
+router.register(r'comments/', CommentViews, basename='comments')
+router.register(r'feed/', FollowingPostViews, basename='following-views')
 
 # urls
 urlpatterns = [
