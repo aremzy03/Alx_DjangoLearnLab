@@ -13,6 +13,6 @@ urlpatterns = [
     path('profile/',ViewProfile.as_view(), name='profile'),
     path('profile/update/', UpdateProfile.as_view(), name='update-profile'),
     path('create-token/', create_token, name='create-token'),
-    path('follow/<int:user_id>', Follow.as_view(), name='follow'),
-    path('unfollow/<int:user_id>', UnFollow.as_view(), name='unfollow'),
+    path('follow/<int:user_id>/', Follow.as_view(), name='follow'),
+    path('unfollow/<int:user_id>/', UnFollow.as_view(), name='unfollow'),
 ]
