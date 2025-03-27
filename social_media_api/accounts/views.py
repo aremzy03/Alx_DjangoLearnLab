@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from .models import CustomUser
 from .serializers import CustomUserSerilizer, UserRegisterSerializer
+from notifications.models import Notification
 
 # Create your views here.
 
@@ -83,6 +85,15 @@ class Follow(generics.GenericAPIView):
         
         user.following.add(follow)
         follow.followers.add(user)
+        
+        #Create Notification
+        Notification.objects.create(
+            recipient = follow,
+            actor = user,
+            verb = f"{user} just followed you",
+            content_type = ContentType.objects.get_for_model(CustomUser),
+            object_id = follow.id
+        )
         return Response({'message':f"you're now following {follow.first_name}"}, status=status.HTTP_200_OK)
 
 class UnFollow(generics.GenericAPIView):

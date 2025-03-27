@@ -1,12 +1,17 @@
 from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from accounts.models import CustomUser
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from .serializers import CommentSerializer, PostSerializer
+from notifications.models import Notification
 
 
 # Create your views here.
@@ -91,3 +96,25 @@ class DeleteComment(generics.DestroyAPIView):
     
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user
+
+#Like and Unlike View
+class LikeView(APIView):
+    authentication_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, id):
+        post = get_object_or_404(Post, id=id)
+        user = request.user
+        like, created = Like.objects.get_or_create(user=user, post=post)
+        if not created:
+            like.delete()
+            return Response({'message':"Post unliked"}, status.HTTP_200_OK)
+        else:
+            #Create Notification
+            Notification.objects.create(
+            recipient = post.author,
+            actor = user,
+            verb = f"{user} just liked your post '{post.title}'",
+            content_type = ContentType.objects.get_for_model(Post),
+            object_id = post.id
+            )
+            return Response({'message':"Post unliked "}, status.HTTP_200_OK)
