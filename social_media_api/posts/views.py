@@ -101,10 +101,9 @@ class DeleteComment(generics.DestroyAPIView):
 class LikeView(APIView):
     authentication_classes = [permissions.IsAuthenticated]
     
-    def post(self, request, id):
-        post = get_object_or_404(Post, id=id)
-        user = request.user
-        like, created = Like.objects.get_or_create(user=user, post=post)
+    def post(self, request, pk):
+        post = generics.get_object_or_404(Post, id=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             like.delete()
             return Response({'message':"Post unliked"}, status.HTTP_200_OK)
