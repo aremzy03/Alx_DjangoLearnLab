@@ -106,8 +106,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'social_media',
         'PORT': '8080',
-        'USER': 'ROOT',
+        'USER': 'aremzy03',
         'PASSWORD': 'aremzyboss',
+        'HOST': 'aremzy03.mysql.pythonanywhere-services.com'
     }
 }
 
