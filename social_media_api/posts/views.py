@@ -111,8 +111,8 @@ class LikeView(APIView):
             #Create Notification
             Notification.objects.create(
             recipient = post.author,
-            actor = user,
-            verb = f"{user} just liked your post '{post.title}'",
+            actor = request.user,
+            verb = f"{request.user} just liked your post '{post.title}'",
             content_type = ContentType.objects.get_for_model(Post),
             object_id = post.id
             )
